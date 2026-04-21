@@ -2,590 +2,1577 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#6366f1" />
-    <link rel="icon" href="logo-xinya.png" type="image/png" />
-    <link rel="manifest" href="manifest.json">
-    <title>TaskFlow - Kelola Tugas Anda</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="欣雅汉字" />
+  <meta name="theme-color" content="#FF6B6B" />
+  <meta name="description" content="Xīnyǎ Hànzì - Belajar Bahasa Mandarin Interaktif" />
+  <link rel="icon" href="icons/logo-xinya.png" type="image/png" />
+  <link rel="manifest" href="manifest.json" />
+  <title>欣雅汉字 · Xīnyǎ Hànzì</title>
 
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-            --bg-dark: #ffffff;
-            --bg-card: #1e293b;
-            --text-light: #f8fafc;
-            --text-gray: #cbd5e1;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-        }
+  <!-- Fonts & Libraries -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #1856bb 100%);
-            color: var(--text-light);
-            min-height: 100vh;
-            padding-bottom: 80px;
-        }
+  <style>
+    /* ════════════════════════════════════════
+       CSS VARIABLES & RESET
+    ════════════════════════════════════════ */
+    :root {
+      --coral:        #FF6B6B;
+      --coral-light:  #FF8E8E;
+      --coral-dark:   #E85555;
+      --mint:         #4ECDC4;
+      --mint-light:   #7EDDD6;
+      --mint-dark:    #35B5AC;
+      --peach:        #FFE0D6;
+      --cream:        #FFF9F7;
+      --sage:         #D4F0ED;
+      --text-dark:    #2D2D2D;
+      --text-mid:     #5A5A72;
+      --text-light:   #9B9BB4;
+      --white:        #FFFFFF;
+      --card-shadow:  0 8px 32px rgba(255,107,107,0.12);
+      --mint-shadow:  0 8px 32px rgba(78,205,196,0.15);
+      --nav-height:   72px;
+      --radius:       20px;
+      --radius-sm:    12px;
+    }
 
-        .header {
-            background: #1856bb;
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: var(--nav-height);
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    /* ════════════════════════════════════════
+       SCROLLBAR
+    ════════════════════════════════════════ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--coral-light); border-radius: 4px; }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
+    /* ════════════════════════════════════════
+       AUTH SCREEN
+    ════════════════════════════════════════ */
+    #authScreen {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E6E 40%, #4ECDC4 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+    }
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-        }
+    .auth-logo { text-align: center; margin-bottom: 32px; animation: floatIn 0.8s ease; }
+    .auth-logo .hanzi-big {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 64px;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: block;
+      line-height: 1;
+    }
+    .auth-logo .app-name   { font-size: 22px; font-weight: 700; color: rgba(255,255,255,0.95); letter-spacing: 1px; }
+    .auth-logo .app-sub    { font-size: 13px; color: rgba(255,255,255,0.75); font-weight: 300; }
 
-        .stats {
-            display: flex;
-            gap: 16px;
-            font-size: 14px;
-            color: var(--text-gray);
-        }
+    .auth-card {
+      background: white;
+      border-radius: 28px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      animation: slideUp 0.5s ease;
+    }
 
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+    .auth-tabs { display: flex; background: #F5F5F5; border-radius: 14px; padding: 4px; margin-bottom: 24px; }
+    .auth-tab-btn {
+      flex: 1; border: none; background: transparent; padding: 10px;
+      border-radius: 11px; font-family: 'Poppins', sans-serif;
+      font-weight: 600; font-size: 14px; color: var(--text-light);
+      transition: all 0.3s; cursor: pointer;
+    }
+    .auth-tab-btn.active { background: var(--coral); color: white; box-shadow: 0 4px 12px rgba(255,107,107,0.35); }
 
-        .stat-number {
-            color: var(--primary-light);
-            font-weight: 700;
-        }
+    .form-label  { font-weight: 500; font-size: 13px; color: var(--text-mid); margin-bottom: 6px; }
+    .form-control {
+      border: 2px solid #F0F0F0; border-radius: 12px;
+      padding: 12px 16px; font-family: 'Poppins', sans-serif;
+      font-size: 14px; transition: border-color 0.2s;
+    }
+    .form-control:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,107,107,0.12); outline: none; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 24px 20px;
-        }
+    .btn-auth {
+      background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+      border: none; border-radius: 14px; padding: 14px;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px;
+      color: white; width: 100%; cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(255,107,107,0.4); margin-top: 8px;
+    }
+    .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,107,107,0.45); }
 
-        .input-section {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-        }
+    .form-check-input:checked { background-color: var(--coral); border-color: var(--coral); }
 
-        .input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+    .auth-error {
+      background: #FFF0F0; border: 1px solid #FFCDD2; border-radius: 10px;
+      padding: 10px 14px; font-size: 13px; color: #D32F2F;
+      margin-bottom: 14px; display: none;
+    }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 14px 18px;
-            background: var(--bg-dark);
-            border: 2px solid rgba(99, 102, 241, 0.3);
-            border-radius: 12px;
-            color: var(--text-light);
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
+    /* ════════════════════════════════════════
+       APP WRAPPER & PAGES
+    ════════════════════════════════════════ */
+    #appWrapper { display: none; animation: fadeIn 0.4s ease; }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+    .page { display: none; min-height: calc(100vh - var(--nav-height)); }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
 
-        .btn {
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* ════════════════════════════════════════
+       HEADER / TOP BAR
+    ════════════════════════════════════════ */
+    .header {
+      background: white;
+      padding: 16px 20px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
+    .header-content { display: flex; align-items: center; justify-content: space-between; }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
-        }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--coral), var(--coral-light));
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif SC', serif; font-size: 20px; color: white;
+      box-shadow: 0 4px 12px rgba(255,107,107,0.35);
+    }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
+    .logo h1 { font-size: 20px; font-weight: 800; color: var(--coral); line-height: 1; }
+    .logo p  { font-size: 10px; color: var(--text-light); letter-spacing: 0.5px; }
 
-        .priority-selector {
-            display: flex;
-            gap: 8px;
-        }
+    .stats { display: flex; gap: 12px; font-size: 13px; color: var(--text-mid); }
+    .stat-item { display: flex; align-items: center; gap: 5px; }
+    .stat-number { color: var(--coral); font-weight: 700; }
 
-        .priority-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: transparent;
-            color: var(--text-gray);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--coral), var(--mint));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
 
-        .priority-btn.active {
-            border-color: currentColor;
-            background: rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
+    /* ════════════════════════════════════════
+       BOTTOM NAV
+    ════════════════════════════════════════ */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--nav-height); background: white;
+      display: flex; align-items: center; justify-content: space-around;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      z-index: 200; border-top: 1px solid rgba(0,0,0,0.06);
+    }
 
-        .priority-btn.high {
-            color: var(--danger);
-        }
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      cursor: pointer; padding: 8px 0; border: none; background: transparent;
+      color: var(--text-light); font-family: 'Poppins', sans-serif; transition: color 0.2s;
+    }
+    .nav-item i    { font-size: 20px; transition: transform 0.2s; }
+    .nav-item span { font-size: 10px; font-weight: 500; }
+    .nav-item.active { color: var(--coral); }
+    .nav-item.active i { transform: scale(1.15); }
 
-        .priority-btn.medium {
-            color: var(--warning);
-        }
+    .nav-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--coral); margin-top: -2px; display: none; }
+    .nav-item.active .nav-dot { display: block; }
 
-        .priority-btn.low {
-            color: var(--success);
-        }
+    /* ════════════════════════════════════════
+       HOME HERO
+    ════════════════════════════════════════ */
+    .hero-section {
+      background: linear-gradient(135deg, var(--coral) 0%, #FF8E6E 60%, var(--mint) 100%);
+      padding: 28px 20px 40px; color: white; position: relative; overflow: hidden;
+    }
+    .hero-section::before {
+      content: '汉字'; position: absolute; right: -10px; top: -10px;
+      font-family: 'Noto Serif SC', serif; font-size: 100px; opacity: 0.1; color: white;
+    }
+    .hero-greeting  { font-size: 14px; opacity: 0.85; }
+    .hero-name      { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .hero-streak {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.2); border-radius: 20px;
+      padding: 6px 14px; font-size: 13px; font-weight: 600; margin-top: 12px;
+    }
+    .progress-ring  { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 14px 18px; margin-top: 18px; }
+    .progress-label { font-size: 12px; opacity: 0.8; margin-bottom: 8px; }
+    .progress-bar   { height: 8px; background: rgba(255,255,255,0.25); border-radius: 10px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: white; border-radius: 10px; transition: width 1s ease; }
 
-        .filter-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
+    /* ════════════════════════════════════════
+       SECTION TITLE & QUICK CARDS
+    ════════════════════════════════════════ */
+    .section-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin: 24px 20px 14px; }
+    .section-title span { color: var(--coral); }
 
-        .filter-tab {
-            padding: 10px 20px;
-            background: var(--bg-card);
-            border: 2px solid transparent;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-size: 14px;
-            font-weight: 500;
-            color: #ffffff;
-        }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px; }
 
-        .filter-tab.active {
-            background: var(--primary);
-            border-color: var(--primary-light);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
+    .quick-card {
+      border-radius: var(--radius); padding: 20px 16px;
+      cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden;
+      border: none; text-align: left;
+    }
+    .quick-card:hover  { transform: translateY(-3px); }
+    .quick-card:active { transform: scale(0.97); }
+    .quick-card.coral  { background: linear-gradient(135deg, var(--coral), #FF8E6E); color: white; box-shadow: var(--card-shadow); }
+    .quick-card.mint   { background: linear-gradient(135deg, var(--mint), var(--mint-light)); color: white; box-shadow: var(--mint-shadow); }
+    .quick-card.peach  { background: var(--peach); color: var(--coral-dark); }
+    .quick-card.sage   { background: var(--sage);  color: var(--mint-dark); }
 
-        .tasks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    .quick-card-icon  { font-size: 28px; margin-bottom: 8px; display: block; }
+    .quick-card-title { font-size: 14px; font-weight: 700; display: block; }
+    .quick-card-sub   { font-size: 11px; opacity: 0.8; }
 
-        .task-item {
-            background: var(--bg-card);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.3s ease;
-            animation: slideIn 0.3s ease;
-        }
+    /* ════════════════════════════════════════
+       VOCAB SCROLL (HOME)
+    ════════════════════════════════════════ */
+    .vocab-scroll { display: flex; gap: 14px; padding: 4px 20px 20px; overflow-x: auto; scrollbar-width: none; }
+    .vocab-scroll::-webkit-scrollbar { display: none; }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+    .vocab-mini-card {
+      min-width: 130px; background: white; border-radius: var(--radius-sm);
+      padding: 16px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      cursor: pointer; transition: all 0.25s; border: 2px solid transparent; text-align: center;
+    }
+    .vocab-mini-card:hover { border-color: var(--coral); transform: translateY(-2px); }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .vocab-hanzi  { font-family: 'Noto Serif SC', serif; font-size: 34px; color: var(--coral); display: block; line-height: 1.2; }
+    .vocab-pinyin { font-size: 12px; color: var(--mint-dark); font-weight: 500; margin: 4px 0 2px; }
+    .vocab-meaning{ font-size: 12px; color: var(--text-mid); }
 
-        .task-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
+    /* ════════════════════════════════════════
+       KOSAKATA PAGE
+    ════════════════════════════════════════ */
+    .filter-tabs {
+      display: flex; gap: 8px; padding: 16px 20px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
 
-        .task-item.high {
-            border-left-color: var(--danger);
-        }
+    .filter-tab {
+      white-space: nowrap; border: 2px solid #EEE;
+      border-radius: 20px; padding: 7px 16px;
+      font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
+      color: var(--text-mid); background: white; cursor: pointer; transition: all 0.2s;
+    }
+    .filter-tab.active { background: var(--coral); border-color: var(--coral); color: white; box-shadow: 0 4px 12px rgba(255,107,107,0.3); }
 
-        .task-item.medium {
-            border-left-color: var(--warning);
-        }
+    .tasks-list { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px; }
 
-        .task-item.low {
-            border-left-color: var(--success);
-        }
+    /* VOCAB CARD (mirip task-item template dosen) */
+    .task-item {
+      background: white; border-radius: 14px; padding: 18px;
+      border-left: 5px solid;
+      display: flex; align-items: center; gap: 16px;
+      transition: all 0.3s; cursor: pointer;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
 
-        .task-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        .task-checkbox:hover {
-            background: rgba(99, 102, 241, 0.1);
-        }
+    .task-item:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
 
-        .task-checkbox.checked {
-            background: var(--primary);
-        }
+    /* Border warna per kategori */
+    .task-item.Salam     { border-left-color: #FF6B6B; }
+    .task-item.Angka     { border-left-color: #FF9F43; }
+    .task-item.Keluarga  { border-left-color: #A29BFE; }
+    .task-item.Makanan   { border-left-color: #FD79A8; }
+    .task-item.Aktivitas { border-left-color: #4ECDC4; }
+    .task-item.Warna     { border-left-color: #6C5CE7; }
 
-        .task-content {
-            flex: 1;
-        }
+    .task-content { flex: 1; }
+    .task-hanzi   { font-family: 'Noto Serif SC', serif; font-size: 38px; color: var(--coral); min-width: 52px; text-align: center; line-height: 1; }
+    .task-text    { font-size: 15px; font-weight: 600; color: var(--text-dark); margin-bottom: 3px; }
+    .task-meta    { display: flex; gap: 10px; font-size: 12px; color: var(--text-light); flex-wrap: wrap; }
+    .task-pinyin  { color: var(--mint-dark); font-weight: 600; }
 
-        .task-text {
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
+    .btn-icon {
+      width: 40px; height: 40px; border: none; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; font-size: 17px; flex-shrink: 0;
+    }
+    .btn-audio {
+      background: linear-gradient(135deg, var(--mint), var(--mint-dark));
+      color: white; box-shadow: 0 4px 12px rgba(78,205,196,0.35);
+    }
+    .btn-audio:hover  { transform: scale(1.1); }
+    .btn-audio.playing { animation: pulseMint 0.6s ease infinite alternate; }
 
-        .task-text.completed {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
+    @keyframes pulseMint {
+      from { box-shadow: 0 4px 12px rgba(78,205,196,0.35); }
+      to   { box-shadow: 0 4px 24px rgba(78,205,196,0.7); }
+    }
 
-        .task-meta {
-            display: flex;
-            gap: 12px;
-            font-size: 12px;
-            color: var(--text-gray);
-        }
+    /* ════════════════════════════════════════
+       SEARCH BAR
+    ════════════════════════════════════════ */
+    .search-wrap { padding: 14px 20px 4px; }
+    .search-bar {
+      background: white; border-radius: 14px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .search-bar i { color: var(--text-light); font-size: 16px; }
+    .search-bar input {
+      border: none; outline: none; flex: 1; font-family: 'Poppins', sans-serif;
+      font-size: 14px; color: var(--text-dark); background: transparent;
+    }
+    .search-bar input::placeholder { color: var(--text-light); }
 
-        .task-time {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+    /* ════════════════════════════════════════
+       KUIS PAGE
+    ════════════════════════════════════════ */
+    .quiz-container { padding: 20px; }
 
-        .task-actions {
-            display: flex;
-            gap: 8px;
-        }
+    .quiz-header {
+      background: linear-gradient(135deg, var(--mint), var(--mint-dark));
+      border-radius: var(--radius); padding: 20px; color: white;
+      margin-bottom: 20px; text-align: center;
+    }
+    .quiz-header h5 { font-weight: 700; margin: 0; }
+    .quiz-score     { font-size: 28px; font-weight: 800; }
+    .quiz-score span{ font-size: 14px; font-weight: 400; opacity: 0.8; }
 
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 18px;
-        }
+    .quiz-progress-bar  { height: 6px; background: rgba(255,255,255,0.3); border-radius: 6px; margin-top: 12px; overflow: hidden; }
+    .quiz-progress-fill { height: 100%; background: white; border-radius: 6px; transition: width 0.4s ease; }
 
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-        }
+    .question-card {
+      background: white; border-radius: var(--radius); padding: 28px 20px;
+      box-shadow: var(--card-shadow); text-align: center; margin-bottom: 20px;
+    }
+    .question-type-badge {
+      display: inline-block; background: var(--peach); color: var(--coral-dark);
+      font-size: 11px; font-weight: 600; border-radius: 20px; padding: 4px 12px; margin-bottom: 14px;
+    }
+    .question-hanzi { font-family: 'Noto Serif SC', serif; font-size: 64px; color: var(--coral); display: block; margin: 10px 0; }
+    .question-text  { font-size: 16px; color: var(--text-dark); font-weight: 500; }
 
-        .btn-delete:hover {
-            background: var(--danger);
-            color: white;
-        }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-gray);
-        }
+    .option-btn {
+      border: 2px solid #EEE; background: white; border-radius: var(--radius-sm);
+      padding: 16px 12px; font-family: 'Poppins', sans-serif; font-size: 14px;
+      font-weight: 500; color: var(--text-dark); cursor: pointer;
+      transition: all 0.2s; text-align: center;
+    }
+    .option-btn:hover:not(:disabled) { border-color: var(--coral); color: var(--coral); }
+    .option-btn.correct { background: #E8F5E9; border-color: #4CAF50; color: #2E7D32; }
+    .option-btn.wrong   { background: #FFEBEE; border-color: #F44336; color: #C62828; }
+    .option-btn:disabled{ cursor: not-allowed; }
 
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
+    .feedback-msg {
+      border-radius: var(--radius-sm); padding: 14px; text-align: center;
+      font-weight: 600; font-size: 14px; margin-top: 14px; display: none;
+    }
+    .feedback-msg.correct { background: #E8F5E9; color: #2E7D32; }
+    .feedback-msg.wrong   { background: #FFEBEE; color: #C62828; }
 
-        .progress-bar {
-            background: var(--bg-card);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
+    .btn-next {
+      background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+      border: none; border-radius: 14px; padding: 14px; color: white;
+      font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 15px;
+      width: 100%; cursor: pointer; margin-top: 14px; transition: all 0.3s; display: none;
+      box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+    }
+    .btn-next:hover { transform: translateY(-2px); }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            transition: width 0.5s ease;
-            border-radius: 4px;
-        }
+    /* ════════════════════════════════════════
+       DAILY LESSON PAGE
+    ════════════════════════════════════════ */
+    .lesson-container { padding: 20px; }
 
-        @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                gap: 12px;
-            }
+    .lesson-header {
+      background: linear-gradient(135deg, var(--coral) 0%, #FF8E6E 60%, var(--mint) 100%);
+      border-radius: var(--radius); padding: 24px; color: white; margin-bottom: 20px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .lesson-header::before {
+      content: '日课'; position: absolute; right: -5px; bottom: -15px;
+      font-family: 'Noto Serif SC', serif; font-size: 70px; opacity: 0.12;
+    }
+    .lesson-day     { font-size: 12px; opacity: 0.8; }
+    .lesson-title   { font-size: 22px; font-weight: 800; margin: 4px 0; }
+    .lesson-subtitle{ font-size: 13px; opacity: 0.85; }
 
-            .input-group {
-                flex-direction: column;
-            }
+    .input-section {
+      background: white; border-radius: var(--radius); padding: 22px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 14px;
+    }
+    .step-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; background: var(--coral); color: white;
+      border-radius: 50%; font-size: 12px; font-weight: 700; margin-bottom: 12px;
+    }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .step-desc  { font-size: 13px; color: var(--text-mid); }
 
-            .stats {
-                width: 100%;
-                justify-content: space-around;
-            }
-        }
+    .lesson-vocab-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 0; border-bottom: 1px solid #F5F5F5;
+    }
+    .lesson-vocab-item:last-child { border-bottom: none; }
+    .lesson-hanzi { font-family: 'Noto Serif SC', serif; font-size: 32px; color: var(--coral); min-width: 44px; }
 
-        .logo h1 {
-            font-size: 50px;
-            font-weight: 800;
-        }
-    </style>
+    .btn-primary {
+      background: linear-gradient(135deg, var(--coral), var(--coral-dark));
+      border: none; border-radius: 14px; padding: 16px;
+      color: white; font-family: 'Poppins', sans-serif; font-weight: 700;
+      font-size: 16px; width: 100%; cursor: pointer; margin-top: 8px;
+      transition: all 0.3s; box-shadow: 0 8px 24px rgba(255,107,107,0.4);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    /* ════════════════════════════════════════
+       PROGRESS PAGE
+    ════════════════════════════════════════ */
+    .progress-container { padding: 20px; }
+
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+
+    .stat-card {
+      background: white; border-radius: var(--radius);
+      padding: 20px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .stat-icon   { font-size: 28px; margin-bottom: 8px; }
+    .stat-value  { font-size: 32px; font-weight: 800; color: var(--coral); line-height: 1; }
+    .stat-label  { font-size: 12px; color: var(--text-light); margin-top: 4px; font-weight: 500; }
+
+    .achievement-list { display: flex; flex-direction: column; gap: 12px; }
+    .achievement-item {
+      background: white; border-radius: var(--radius-sm); padding: 16px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .achievement-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .achievement-icon.earned { background: linear-gradient(135deg, var(--coral), #FF8E6E); }
+    .achievement-icon.locked { background: #F5F5F5; filter: grayscale(1); opacity: 0.5; }
+    .achievement-title { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+    .achievement-desc  { font-size: 12px; color: var(--text-light); }
+
+    .streak-calendar { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 20px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; margin-top: 12px; }
+    .cal-day {
+      aspect-ratio: 1; border-radius: 8px; background: #F5F5F5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--text-light); font-weight: 500;
+    }
+    .cal-day.active { background: var(--coral); color: white; }
+    .cal-day.today  { border: 2px solid var(--coral); background: var(--peach); color: var(--coral-dark); }
+
+    /* ════════════════════════════════════════
+       PROFILE DROPDOWN
+    ════════════════════════════════════════ */
+    .profile-dropdown {
+      position: absolute; top: 60px; right: 16px;
+      background: white; border-radius: var(--radius-sm);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      padding: 8px; min-width: 180px; z-index: 300; display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .profile-dropdown.open { display: block; }
+
+    .dropdown-item-custom {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 10px; cursor: pointer; font-size: 14px; color: var(--text-dark);
+      transition: background 0.15s; border: none; background: none;
+      width: 100%; font-family: 'Poppins', sans-serif;
+    }
+    .dropdown-item-custom:hover  { background: var(--cream); }
+    .dropdown-item-custom.danger { color: var(--coral); }
+
+    /* ════════════════════════════════════════
+       TOAST NOTIFIKASI
+    ════════════════════════════════════════ */
+    .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9000; }
+    .toast-custom {
+      background: var(--text-dark); color: white; border-radius: 30px;
+      padding: 12px 24px; font-size: 13px; font-weight: 500; white-space: nowrap;
+      animation: slideDown 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* ════════════════════════════════════════
+       KUIS RESULT SCREEN
+    ════════════════════════════════════════ */
+    .result-screen { text-align: center; padding: 40px 20px; }
+    .result-emoji  { font-size: 72px; margin-bottom: 16px; animation: bounceIn 0.6s ease; }
+    .result-title  { font-size: 28px; font-weight: 800; color: var(--text-dark); }
+    .result-sub    { font-size: 15px; color: var(--text-mid); margin: 8px 0 24px; }
+    .result-stat   {
+      background: white; border-radius: var(--radius); padding: 20px;
+      display: flex; justify-content: space-around; margin-bottom: 20px;
+      box-shadow: var(--card-shadow);
+    }
+    .result-stat-item { text-align: center; }
+    .result-stat-val  { font-size: 28px; font-weight: 800; color: var(--coral); }
+    .result-stat-lbl  { font-size: 12px; color: var(--text-light); }
+
+    /* ════════════════════════════════════════
+       EMPTY STATE
+    ════════════════════════════════════════ */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-gray, var(--text-light)); }
+    .empty-icon  { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
+
+    /* ════════════════════════════════════════
+       MODAL CUSTOMIZATION
+    ════════════════════════════════════════ */
+    .modal-content { border-radius: 24px !important; border: none !important; }
+    .modal-header  { border-bottom: none !important; }
+    .modal-footer  { border-top: none !important; }
+    .modal-hanzi   { font-family: 'Noto Serif SC', serif; font-size: 72px; color: var(--coral); text-align: center; line-height: 1; }
+    .modal-pinyin  { text-align: center; font-size: 18px; color: var(--mint-dark); font-weight: 600; }
+    .modal-meaning { text-align: center; font-size: 20px; color: var(--text-dark); font-weight: 600; margin: 8px 0; }
+    .modal-example { background: var(--peach); border-radius: var(--radius-sm); padding: 14px; margin-top: 14px; }
+    .modal-example-hanzi  { font-family: 'Noto Serif SC', serif; font-size: 18px; color: var(--coral-dark); }
+    .modal-example-pinyin { font-size: 13px; color: var(--mint-dark); font-weight: 500; }
+    .modal-example-meaning{ font-size: 13px; color: var(--text-mid); }
+
+    /* ════════════════════════════════════════
+       ANIMATIONS
+    ════════════════════════════════════════ */
+    @keyframes fadeIn  { from { opacity: 0; }                          to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes floatIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes bounceIn {
+      0%   { transform: scale(0.3); opacity: 0; }
+      50%  { transform: scale(1.05); }
+      70%  { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .header-content { flex-wrap: wrap; gap: 8px; }
+      .stats { font-size: 12px; }
+    }
+    @media (max-width: 380px) {
+      .question-hanzi { font-size: 52px; }
+      .quick-card-icon { font-size: 22px; }
+    }
+  </style>
 </head>
 
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">✓</div>
-                <h1 class="text-judul">TaskFlow</h1>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <span>📝</span>
-                    <span>Total: <span class="stat-number" id="totalTasks">0</span></span>
-                </div>
-                <div class="stat-item">
-                    <span>✅</span>
-                    <span>Selesai: <span class="stat-number" id="completedTasks">0</span></span>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <div class="container">
-        <div class="input-section">
-            <div class="input-group">
-                <input type="text" id="taskInput" placeholder="Tambahkan tugas baru..."
-                    onkeypress="if(event.key==='Enter') addTask()" />
-                <button class="btn btn-primary" onclick="addTask()">
-                    <span>➕</span>
-                    <span>Tambah</span>
-                </button>
-            </div>
-            <div class="priority-selector">
-                <button class="priority-btn high" onclick="setPriority('high')">🔴 Tinggi</button>
-                <button class="priority-btn medium active" onclick="setPriority('medium')">🟡 Sedang</button>
-                <button class="priority-btn low" onclick="setPriority('low')">🟢 Rendah</button>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
-            </div>
-        </div>
+<!-- ════════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════════ -->
+<div id="authScreen">
+  <div class="auth-logo">
+    <span class="hanzi-big">欣雅</span>
+    <div class="app-name">Xīnyǎ Hànzì</div>
+    <div class="app-sub">Belajar Mandarin Interaktif</div>
+  </div>
 
-        <div class="filter-tabs">
-            <button class="filter-tab active" onclick="filterTasks('all')">Semua</button>
-            <button class="filter-tab" onclick="filterTasks('active')">Aktif</button>
-            <button class="filter-tab" onclick="filterTasks('completed')">Selesai</button>
-            <button class="filter-tab" onclick="filterTasks('high')">🔴 Prioritas Tinggi</button>
-            <button class="filter-tab" onclick="filterTasks('medium')">🟡 Prioritas Sedang</button>
-            <button class="filter-tab" onclick="filterTasks('low')">🟢 Prioritas Rendah</button>
-        </div>
-
-        <div class="tasks-list" id="tasksList"></div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" onclick="switchTab('login')">Masuk</button>
+      <button class="auth-tab-btn" onclick="switchTab('register')">Daftar</button>
     </div>
 
-    <script>
-        let tasks = [];
-        let currentPriority = 'medium';
-        let currentFilter = 'all';
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <div id="loginError" class="auth-error">⚠️ Email atau password salah.</div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" id="loginEmail" class="form-control" placeholder="nama@email.com" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <div style="position:relative">
+          <input type="password" id="loginPass" class="form-control pe-5" placeholder="••••••"
+            onkeypress="if(event.key==='Enter') doLogin()" />
+          <i class="bi bi-eye" id="toggleLoginPass"
+            style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:#aaa"
+            onclick="togglePass('loginPass','toggleLoginPass')"></i>
+        </div>
+      </div>
+      <div class="mb-3 d-flex align-items-center gap-2">
+        <input class="form-check-input" type="checkbox" id="rememberMe" style="width:18px;height:18px;" />
+        <label class="form-check-label" for="rememberMe" style="font-size:13px;color:var(--text-mid);cursor:pointer">Ingat saya</label>
+      </div>
+      <button class="btn-auth" onclick="doLogin()">🔑 Masuk</button>
+    </div>
 
-        function loadTasks() {
-            const saved = localStorage.getItem('taskflow_tasks');
-            if (saved) {
-                tasks = JSON.parse(saved);
-                renderTasks();
-            }
-        }
+    <!-- REGISTER -->
+    <div id="registerForm" style="display:none">
+      <div id="registerError" class="auth-error">⚠️ <span id="registerErrMsg"></span></div>
+      <div class="mb-3">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" id="regName" class="form-control" placeholder="Nama kamu" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" id="regEmail" class="form-control" placeholder="nama@email.com" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password <span style="font-size:11px;color:var(--text-light)">(min. 6 karakter)</span></label>
+        <div style="position:relative">
+          <input type="password" id="regPass" class="form-control pe-5" placeholder="••••••"
+            onkeypress="if(event.key==='Enter') doRegister()" />
+          <i class="bi bi-eye" id="toggleRegPass"
+            style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:#aaa"
+            onclick="togglePass('regPass','toggleRegPass')"></i>
+        </div>
+      </div>
+      <button class="btn-auth" onclick="doRegister()">✨ Buat Akun</button>
+    </div>
+  </div>
+</div>
 
-        function saveTasks() {
-            localStorage.setItem('taskflow_tasks', JSON.stringify(tasks));
-        }
+<!-- ════════════════════════════════════════
+     APP WRAPPER
+════════════════════════════════════════ -->
+<div id="appWrapper">
 
-        function setPriority(priority) {
-            currentPriority = priority;
-            document.querySelectorAll('.priority-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
+  <!-- Toast -->
+  <div class="toast-container" id="toastContainer"></div>
 
-        function addTask() {
-            const input = document.getElementById('taskInput');
-            const text = input.value.trim();
+  <!-- Profile Dropdown -->
+  <div class="profile-dropdown" id="profileDropdown">
+    <div style="padding:10px 12px 6px;border-bottom:1px solid #F5F5F5;margin-bottom:4px">
+      <div style="font-weight:700;font-size:14px" id="ddName">Nama User</div>
+      <div style="font-size:12px;color:var(--text-light)" id="ddEmail">email@gmail.com</div>
+    </div>
+    <button class="dropdown-item-custom" onclick="navigate('progres')"><i class="bi bi-graph-up"></i> Progres Saya</button>
+    <button class="dropdown-item-custom danger" onclick="doLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+  </div>
 
-            if (text === '') return;
-
-            const task = {
-                id: Date.now(),
-                text: text,
-                completed: false,
-                priority: currentPriority,
-                createdAt: new Date().toLocaleString('id-ID')
-            };
-
-            tasks.unshift(task);
-            input.value = '';
-            saveTasks();
-            renderTasks();
-        }
-
-        function toggleTask(id) {
-            const task = tasks.find(t => t.id === id);
-            if (task) {
-                task.completed = !task.completed;
-                saveTasks();
-                renderTasks();
-            }
-        }
-
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-            renderTasks();
-        }
-
-        function filterTasks(filter) {
-            currentFilter = filter;
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            renderTasks();
-        }
-
-        function renderTasks() {
-            const container = document.getElementById('tasksList');
-
-            let filteredTasks = tasks;
-
-            if (currentFilter === 'active') {
-                filteredTasks = tasks.filter(t => !t.completed);
-            } else if (currentFilter === 'completed') {
-                filteredTasks = tasks.filter(t => t.completed);
-            } else if (['high', 'medium', 'low'].includes(currentFilter)) {
-                filteredTasks = tasks.filter(t => t.priority === currentFilter);
-            }
-
-            if (filteredTasks.length === 0) {
-                container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📋</div>
-            <h3>Tidak ada tugas</h3>
-            <p>Mulai tambahkan tugas baru untuk memulai!</p>
+  <!-- ─── PAGE: BERANDA ─── -->
+  <div class="page active" id="page-beranda">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">字</div>
+          <div>
+            <h1>欣雅汉字</h1>
+            <p>Xīnyǎ Hànzì</p>
           </div>
-        `;
-            } else {
-                container.innerHTML = filteredTasks.map(task => `
-          <div class="task-item ${task.priority}">
-            <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(${task.id})">
-              ${task.completed ? '✓' : ''}
-            </div>
-            <div class="task-content">
-              <div class="task-text ${task.completed ? 'completed' : ''}">${task.text}</div>
-              <div class="task-meta">
-                <span class="task-time">🕒 ${task.createdAt}</span>
-                <span>📌 ${task.priority === 'high' ? 'Tinggi' : task.priority === 'medium' ? 'Sedang' : 'Rendah'}</span>
-              </div>
-            </div>
-            <div class="task-actions">
-              <button class="btn-icon btn-delete" onclick="deleteTask(${task.id})">🗑️</button>
-            </div>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <span>📝</span>
+            <span>Kata: <span class="stat-number" id="statWords">0</span></span>
           </div>
-        `).join('');
-            }
+          <div class="stat-item">
+            <span>🔥</span>
+            <span>Streak: <span class="stat-number" id="statStreak">0</span></span>
+          </div>
+        </div>
+        <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">A</div>
+      </div>
+    </header>
 
-            updateStats();
-        }
+    <div class="hero-section">
+      <div class="hero-greeting">Nǐ hǎo! 👋</div>
+      <div class="hero-name" id="heroName">Halo, Pelajar!</div>
+      <div class="hero-streak">🔥 <span id="streakCount">0</span> hari streak</div>
+      <div class="progress-ring">
+        <div class="progress-label">Progress Hari Ini · <span id="todayProgressText">0/10 kata</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="todayProgressBar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
 
-        function updateStats() {
-            const total = tasks.length;
-            const completed = tasks.filter(t => t.completed).length;
-            const progress = total > 0 ? (completed / total) * 100 : 0;
+    <div class="section-title">Menu <span>Utama</span></div>
+    <div class="quick-actions">
+      <button class="quick-card coral" onclick="navigate('kosakata')">
+        <span class="quick-card-icon">📚</span>
+        <span class="quick-card-title">Kosakata</span>
+        <div class="quick-card-sub">词汇 · cíhuì</div>
+      </button>
+      <button class="quick-card mint" onclick="navigate('kuis')">
+        <span class="quick-card-icon">🧩</span>
+        <span class="quick-card-title">Kuis</span>
+        <div class="quick-card-sub">测验 · cèyàn</div>
+      </button>
+      <button class="quick-card sage" onclick="navigate('harian')">
+        <span class="quick-card-icon">📅</span>
+        <span class="quick-card-title">Harian</span>
+        <div class="quick-card-sub">日课 · rìkè</div>
+      </button>
+      <button class="quick-card peach" onclick="navigate('progres')">
+        <span class="quick-card-icon">📊</span>
+        <span class="quick-card-title">Progres</span>
+        <div class="quick-card-sub">进度 · jìndù</div>
+      </button>
+    </div>
 
-            document.getElementById('totalTasks').textContent = total;
-            document.getElementById('completedTasks').textContent = completed;
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
+    <div class="section-title">Kata <span>Populer</span></div>
+    <div class="vocab-scroll" id="popularVocab"></div>
+  </div>
 
-        loadTasks();
+  <!-- ─── PAGE: KOSAKATA ─── -->
+  <div class="page" id="page-kosakata">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">词</div>
+          <div>
+            <h1>词汇</h1>
+            <p>Kosakata · Cíhuì</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <span>📚</span>
+            <span>Total: <span class="stat-number" id="totalVocab">0</span></span>
+          </div>
+          <div class="stat-item">
+            <span>✅</span>
+            <span>Dipelajari: <span class="stat-number" id="learnedVocab">0</span></span>
+          </div>
+        </div>
+        <div class="user-avatar" id="userAvatar2" onclick="toggleDropdown()">A</div>
+      </div>
+    </header>
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(() => console.log('Service Worker registered'))
-                    .catch(err => console.error('Service Worker error:', err));
-            });
-        }
-    </script>
+    <div class="search-wrap">
+      <div class="search-bar">
+        <i class="bi bi-search"></i>
+        <input type="text" id="vocabSearch" placeholder="Cari hanzi, pinyin, atau arti..."
+          oninput="filterVocab()" />
+      </div>
+    </div>
+
+    <div class="filter-tabs" id="filterTabs"></div>
+    <div class="tasks-list" id="tasksList"></div>
+  </div>
+
+  <!-- ─── PAGE: KUIS ─── -->
+  <div class="page" id="page-kuis">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">测</div>
+          <div>
+            <h1>测验</h1>
+            <p>Kuis · Cèyàn</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat-item">
+            <span>🎯</span>
+            <span>Akurasi: <span class="stat-number" id="quizAccStat">0%</span></span>
+          </div>
+        </div>
+        <div class="user-avatar" id="userAvatar3" onclick="toggleDropdown()">A</div>
+      </div>
+    </header>
+    <div class="quiz-container" id="quizContainer"></div>
+  </div>
+
+  <!-- ─── PAGE: HARIAN ─── -->
+  <div class="page" id="page-harian">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">日</div>
+          <div>
+            <h1>日课</h1>
+            <p>Pelajaran Harian · Rìkè</p>
+          </div>
+        </div>
+        <div class="user-avatar" id="userAvatar4" onclick="toggleDropdown()">A</div>
+      </div>
+    </header>
+    <div class="lesson-container" id="lessonContainer"></div>
+  </div>
+
+  <!-- ─── PAGE: PROGRES ─── -->
+  <div class="page" id="page-progres">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">进</div>
+          <div>
+            <h1>进度</h1>
+            <p>Progres · Jìndù</p>
+          </div>
+        </div>
+        <div class="user-avatar" id="userAvatar5" onclick="toggleDropdown()">A</div>
+      </div>
+    </header>
+    <div class="progress-container" id="progressContainer"></div>
+  </div>
+
+  <!-- ─── BOTTOM NAV ─── -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-beranda" onclick="navigate('beranda')">
+      <i class="bi bi-house-heart-fill"></i>
+      <span>Beranda</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-kosakata" onclick="navigate('kosakata')">
+      <i class="bi bi-book-half"></i>
+      <span>Kosakata</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-kuis" onclick="navigate('kuis')">
+      <i class="bi bi-puzzle-fill"></i>
+      <span>Kuis</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-harian" onclick="navigate('harian')">
+      <i class="bi bi-calendar2-heart-fill"></i>
+      <span>Harian</span>
+      <div class="nav-dot"></div>
+    </button>
+    <button class="nav-item" id="nav-progres" onclick="navigate('progres')">
+      <i class="bi bi-bar-chart-fill"></i>
+      <span>Progres</span>
+      <div class="nav-dot"></div>
+    </button>
+  </nav>
+</div>
+
+<!-- VOCAB DETAIL MODAL -->
+<div class="modal fade" id="vocabModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header pb-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body pt-0" id="vocabModalBody"></div>
+      <div class="modal-footer pt-0">
+        <button class="btn-primary" onclick="playModalAudio()">
+          <i class="bi bi-volume-up-fill"></i> Dengarkan Pengucapan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ════════════════════════════════════════
+   DATA KOSAKATA
+════════════════════════════════════════ */
+const VOCAB_DATA = [
+  // Salam
+  { hanzi:'你好',   pinyin:'nǐ hǎo',      meaning:'Halo / Selamat',    pos:'Salam',     category:'Salam',
+    example:'你好！我是小明。', exPinyin:'Nǐ hǎo! Wǒ shì Xiǎomíng.', exMeaning:'Halo! Aku adalah Xiao Ming.' },
+  { hanzi:'谢谢',   pinyin:'xiè xiè',     meaning:'Terima kasih',      pos:'Salam',     category:'Salam',
+    example:'谢谢你！', exPinyin:'Xiè xiè nǐ!', exMeaning:'Terima kasih!' },
+  { hanzi:'对不起', pinyin:'duì bu qǐ',   meaning:'Maaf',              pos:'Salam',     category:'Salam',
+    example:'对不起，我迟到了。', exPinyin:'Duì bu qǐ, wǒ chí dào le.', exMeaning:'Maaf, aku terlambat.' },
+  { hanzi:'再见',   pinyin:'zài jiàn',    meaning:'Sampai jumpa',      pos:'Salam',     category:'Salam',
+    example:'再见，明天见！', exPinyin:'Zài jiàn, míngtiān jiàn!', exMeaning:'Sampai jumpa, sampai besok!' },
+  { hanzi:'请',     pinyin:'qǐng',        meaning:'Silakan / Tolong',  pos:'Kata keterangan', category:'Salam',
+    example:'请进。', exPinyin:'Qǐng jìn.', exMeaning:'Silakan masuk.' },
+  // Angka
+  { hanzi:'一', pinyin:'yī',  meaning:'Satu',    pos:'Numeralia', category:'Angka',
+    example:'我有一个苹果。', exPinyin:'Wǒ yǒu yī gè píngguǒ.', exMeaning:'Aku punya satu apel.' },
+  { hanzi:'二', pinyin:'èr',  meaning:'Dua',     pos:'Numeralia', category:'Angka',
+    example:'这里有二只猫。', exPinyin:'Zhèlǐ yǒu èr zhī māo.', exMeaning:'Di sini ada dua kucing.' },
+  { hanzi:'三', pinyin:'sān', meaning:'Tiga',    pos:'Numeralia', category:'Angka',
+    example:'他有三个朋友。', exPinyin:'Tā yǒu sān gè péngyǒu.', exMeaning:'Dia punya tiga teman.' },
+  { hanzi:'五', pinyin:'wǔ',  meaning:'Lima',    pos:'Numeralia', category:'Angka',
+    example:'五加五等于十。', exPinyin:'Wǔ jiā wǔ děngyú shí.', exMeaning:'Lima ditambah lima sama dengan sepuluh.' },
+  { hanzi:'十', pinyin:'shí', meaning:'Sepuluh', pos:'Numeralia', category:'Angka',
+    example:'我今年十岁。', exPinyin:'Wǒ jīnnián shí suì.', exMeaning:'Aku tahun ini berumur sepuluh tahun.' },
+  // Keluarga
+  { hanzi:'爸爸', pinyin:'bà ba',   meaning:'Ayah',             pos:'Kata benda', category:'Keluarga',
+    example:'爸爸在家里。', exPinyin:'Bàba zài jiālǐ.', exMeaning:'Ayah ada di rumah.' },
+  { hanzi:'妈妈', pinyin:'mā ma',   meaning:'Ibu',              pos:'Kata benda', category:'Keluarga',
+    example:'妈妈做饭了。', exPinyin:'Māma zuò fàn le.', exMeaning:'Ibu sudah memasak.' },
+  { hanzi:'哥哥', pinyin:'gē ge',   meaning:'Kakak laki-laki',  pos:'Kata benda', category:'Keluarga',
+    example:'我哥哥很高。', exPinyin:'Wǒ gēge hěn gāo.', exMeaning:'Kakak laki-lakiku sangat tinggi.' },
+  { hanzi:'姐姐', pinyin:'jiě jie', meaning:'Kakak perempuan',  pos:'Kata benda', category:'Keluarga',
+    example:'姐姐在学校。', exPinyin:'Jiějie zài xuéxiào.', exMeaning:'Kakak perempuan ada di sekolah.' },
+  { hanzi:'朋友', pinyin:'péng yǒu',meaning:'Teman',            pos:'Kata benda', category:'Keluarga',
+    example:'他是我的好朋友。', exPinyin:'Tā shì wǒ de hǎo péngyǒu.', exMeaning:'Dia adalah teman baikku.' },
+  // Makanan
+  { hanzi:'米饭', pinyin:'mǐ fàn',   meaning:'Nasi',   pos:'Kata benda', category:'Makanan',
+    example:'我喜欢吃米饭。', exPinyin:'Wǒ xǐhuān chī mǐfàn.', exMeaning:'Aku suka makan nasi.' },
+  { hanzi:'面条', pinyin:'miàn tiáo',meaning:'Mie',    pos:'Kata benda', category:'Makanan',
+    example:'这碗面条很好吃。', exPinyin:'Zhè wǎn miàntiáo hěn hǎochī.', exMeaning:'Semangkuk mie ini sangat enak.' },
+  { hanzi:'水',   pinyin:'shuǐ',     meaning:'Air',    pos:'Kata benda', category:'Makanan',
+    example:'请给我一杯水。', exPinyin:'Qǐng gěi wǒ yī bēi shuǐ.', exMeaning:'Tolong beri aku segelas air.' },
+  { hanzi:'苹果', pinyin:'píng guǒ', meaning:'Apel',   pos:'Kata benda', category:'Makanan',
+    example:'这个苹果很甜。', exPinyin:'Zhège píngguǒ hěn tián.', exMeaning:'Apel ini sangat manis.' },
+  { hanzi:'茶',   pinyin:'chá',      meaning:'Teh',    pos:'Kata benda', category:'Makanan',
+    example:'我想喝绿茶。', exPinyin:'Wǒ xiǎng hē lǜchá.', exMeaning:'Aku ingin minum teh hijau.' },
+  // Aktivitas
+  { hanzi:'学习', pinyin:'xué xí',   meaning:'Belajar',       pos:'Kata kerja', category:'Aktivitas',
+    example:'我每天学习中文。', exPinyin:'Wǒ měitiān xuéxí Zhōngwén.', exMeaning:'Aku belajar Mandarin setiap hari.' },
+  { hanzi:'吃',   pinyin:'chī',      meaning:'Makan',         pos:'Kata kerja', category:'Aktivitas',
+    example:'我们一起吃饭吧。', exPinyin:'Wǒmen yīqǐ chīfàn ba.', exMeaning:'Ayo kita makan bersama.' },
+  { hanzi:'喝',   pinyin:'hē',       meaning:'Minum',         pos:'Kata kerja', category:'Aktivitas',
+    example:'他喝了一杯咖啡。', exPinyin:'Tā hē le yī bēi kāfēi.', exMeaning:'Dia minum secangkir kopi.' },
+  { hanzi:'睡觉', pinyin:'shuì jiào',meaning:'Tidur',         pos:'Kata kerja', category:'Aktivitas',
+    example:'晚上十点我去睡觉。', exPinyin:'Wǎnshang shí diǎn wǒ qù shuìjiào.', exMeaning:'Jam 10 malam aku pergi tidur.' },
+  { hanzi:'看书', pinyin:'kàn shū',  meaning:'Membaca buku',  pos:'Kata kerja', category:'Aktivitas',
+    example:'我喜欢在图书馆看书。', exPinyin:'Wǒ xǐhuān zài túshūguǎn kàn shū.', exMeaning:'Aku suka membaca buku di perpustakaan.' },
+  // Warna
+  { hanzi:'红色', pinyin:'hóng sè', meaning:'Merah', pos:'Kata sifat', category:'Warna',
+    example:'她穿红色的裙子。', exPinyin:'Tā chuān hóngsè de qúnzi.', exMeaning:'Dia memakai gaun merah.' },
+  { hanzi:'蓝色', pinyin:'lán sè',  meaning:'Biru',  pos:'Kata sifat', category:'Warna',
+    example:'天空是蓝色的。', exPinyin:'Tiānkōng shì lánsè de.', exMeaning:'Langit berwarna biru.' },
+  { hanzi:'绿色', pinyin:'lǜ sè',   meaning:'Hijau', pos:'Kata sifat', category:'Warna',
+    example:'草地是绿色的。', exPinyin:'Cǎodì shì lǜsè de.', exMeaning:'Rumput berwarna hijau.' },
+  { hanzi:'白色', pinyin:'bái sè',  meaning:'Putih', pos:'Kata sifat', category:'Warna',
+    example:'雪是白色的。', exPinyin:'Xuě shì báisè de.', exMeaning:'Salju berwarna putih.' },
+  { hanzi:'黑色', pinyin:'hēi sè',  meaning:'Hitam', pos:'Kata sifat', category:'Warna',
+    example:'我的头发是黑色的。', exPinyin:'Wǒ de tóufa shì hēisè de.', exMeaning:'Rambutku berwarna hitam.' },
+];
+
+const DAILY_LESSONS = [
+  { day:1, title:'Salam Dasar',       subtitle:'Kenalan dan Sapaan',         theme:'Salam',
+    intro:'Hari ini kita belajar cara menyapa dalam bahasa Mandarin. Salam adalah kunci komunikasi!',
+    vocab:['你好','谢谢','对不起','再见','请'],
+    tips:'Nada sangat penting dalam bahasa Mandarin. 你好 (nǐ hǎo) menggunakan nada ke-3 dua kali!' },
+  { day:2, title:'Angka 1-10',         subtitle:'Berhitung Dasar',            theme:'Angka',
+    intro:'Angka dasar adalah fondasi penting! Mari belajar angka 1 sampai 10 dalam Mandarin.',
+    vocab:['一','二','三','五','十'],
+    tips:'四 (sì = empat) terdengar mirip 死 (sǐ = mati), sehingga sering dihindari di beberapa konteks.' },
+  { day:3, title:'Keluarga',            subtitle:'Mengenal Anggota Keluarga',  theme:'Keluarga',
+    intro:'Keluarga adalah topik penting untuk percakapan sehari-hari.',
+    vocab:['爸爸','妈妈','哥哥','姐姐','朋友'],
+    tips:'Dalam bahasa Mandarin, urutan kakak-adik sangat penting dan dibedakan berdasarkan gender.' },
+  { day:4, title:'Makanan',             subtitle:'Makanan & Minuman',          theme:'Makanan',
+    intro:'Makanan adalah bagian besar dari budaya Tionghoa. Mari belajar kosakata makanan dasar!',
+    vocab:['米饭','面条','水','苹果','茶'],
+    tips:'好吃 (hǎochī) artinya "enak dimakan" - digunakan untuk memuji makanan!' },
+  { day:5, title:'Aktivitas Harian',    subtitle:'Rutinitas Sehari-hari',      theme:'Aktivitas',
+    intro:'Kata kerja dasar untuk aktivitas sehari-hari sangat berguna dalam percakapan!',
+    vocab:['学习','吃','喝','睡觉','看书'],
+    tips:'了 (le) ditambahkan setelah kata kerja untuk menunjukkan aksi yang sudah selesai!' },
+  { day:6, title:'Warna',               subtitle:'Mengenal Nama Warna',        theme:'Warna',
+    intro:'Warna sering digunakan dalam deskripsi. Mari pelajari nama-nama warna dalam bahasa Mandarin!',
+    vocab:['红色','蓝色','绿色','白色','黑色'],
+    tips:'色 (sè) berarti "warna". Bisa juga menggunakan hanya 红 (hóng) untuk merah, tanpa 色.' },
+];
+
+/* ════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════ */
+function hashPass(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; }
+  return h.toString(36);
+}
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function showToast(msg, dur = 2500) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast-custom';
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, dur);
+}
+
+function getProgress() {
+  const s = getSession();
+  if (!s) return {};
+  return JSON.parse(localStorage.getItem('xhz_progress_' + s.email) || '{}');
+}
+function saveProgress(data) {
+  const s = getSession();
+  if (!s) return;
+  localStorage.setItem('xhz_progress_' + s.email, JSON.stringify(data));
+}
+function getSession() {
+  return JSON.parse(localStorage.getItem('xhz_session') || 'null');
+}
+
+/* ════════════════════════════════════════
+   AUTH
+════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab-btn').forEach((b, i) =>
+    b.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1))
+  );
+  document.getElementById('loginForm').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+function togglePass(inputId, iconId) {
+  const inp = document.getElementById(inputId);
+  const ico = document.getElementById(iconId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  ico.className = 'bi bi-eye' + (inp.type === 'text' ? '-slash' : '');
+}
+
+function doRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const errEl = document.getElementById('registerError');
+  const msgEl = document.getElementById('registerErrMsg');
+  errEl.style.display = 'none';
+
+  if (!name)                { msgEl.textContent = 'Nama harus diisi.';          errEl.style.display = 'block'; return; }
+  if (!isValidEmail(email)) { msgEl.textContent = 'Format email tidak valid.';  errEl.style.display = 'block'; return; }
+  if (pass.length < 6)      { msgEl.textContent = 'Password minimal 6 karakter.'; errEl.style.display = 'block'; return; }
+
+  const users = JSON.parse(localStorage.getItem('xhz_users') || '[]');
+  if (users.find(u => u.email === email)) {
+    msgEl.textContent = 'Email sudah terdaftar.'; errEl.style.display = 'block'; return;
+  }
+
+  users.push({ name, email, pass: hashPass(pass), createdAt: Date.now() });
+  localStorage.setItem('xhz_users', JSON.stringify(users));
+  showToast('✅ Akun berhasil dibuat! Silakan login.');
+  switchTab('login');
+  document.getElementById('loginEmail').value = email;
+}
+
+function doLogin() {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const pass     = document.getElementById('loginPass').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const errEl    = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  const users = JSON.parse(localStorage.getItem('xhz_users') || '[]');
+  const user  = users.find(u => u.email === email && u.pass === hashPass(pass));
+  if (!user) { errEl.style.display = 'block'; return; }
+
+  localStorage.setItem('xhz_session', JSON.stringify({ name: user.name, email: user.email, remember, loginAt: Date.now() }));
+  startApp(user);
+}
+
+function doLogout() {
+  localStorage.removeItem('xhz_session');
+  location.reload();
+}
+
+function checkSession() {
+  const session = getSession();
+  if (session) {
+    const users = JSON.parse(localStorage.getItem('xhz_users') || '[]');
+    const user  = users.find(u => u.email === session.email);
+    if (user) { startApp(user); return; }
+  }
+  document.getElementById('authScreen').style.display = 'flex';
+}
+
+/* ════════════════════════════════════════
+   APP START
+════════════════════════════════════════ */
+function startApp(user) {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appWrapper').style.display = 'block';
+
+  const initial = user.name.charAt(0).toUpperCase();
+  ['userAvatar','userAvatar2','userAvatar3','userAvatar4','userAvatar5'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = initial;
+  });
+
+  document.getElementById('heroName').textContent = 'Halo, ' + user.name.split(' ')[0] + '!';
+  document.getElementById('ddName').textContent  = user.name;
+  document.getElementById('ddEmail').textContent = user.email;
+  document.getElementById('totalVocab').textContent = VOCAB_DATA.length;
+
+  initProgress();
+  renderPopularVocab();
+  renderFilterTabs();
+  renderTasksList();
+  renderLesson();
+  navigate('beranda');
+}
+
+function initProgress() {
+  let p = getProgress();
+  if (!p.streak)      p.streak      = 0;
+  if (!p.totalWords)  p.totalWords  = 0;
+  if (!p.quizCorrect) p.quizCorrect = 0;
+  if (!p.quizTotal)   p.quizTotal   = 0;
+  if (!p.learnedWords) p.learnedWords = [];
+  if (!p.studyDates)  p.studyDates  = [];
+  if (!p.currentDay)  p.currentDay  = 1;
+  if (!p.todayWords)  p.todayWords  = 0;
+
+  const today     = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (p.lastStudyDate !== today) {
+    if (p.lastStudyDate === yesterday) p.streak++;
+    else if (p.lastStudyDate && p.lastStudyDate !== today) p.streak = 0;
+    p.lastStudyDate = today;
+    p.todayWords    = 0;
+    if (!p.studyDates.includes(today)) p.studyDates.push(today);
+  }
+
+  saveProgress(p);
+  updateStats(p);
+}
+
+function updateStats(p) {
+  const prog = p || getProgress();
+  document.getElementById('streakCount').textContent       = prog.streak || 0;
+  document.getElementById('statStreak').textContent        = prog.streak || 0;
+  document.getElementById('statWords').textContent         = prog.totalWords || 0;
+  document.getElementById('learnedVocab').textContent      = (prog.learnedWords || []).length;
+  document.getElementById('todayProgressText').textContent = (prog.todayWords || 0) + '/10 kata';
+  document.getElementById('todayProgressBar').style.width  = Math.min(((prog.todayWords || 0) / 10) * 100, 100) + '%';
+  const acc = prog.quizTotal > 0 ? Math.round((prog.quizCorrect / prog.quizTotal) * 100) : 0;
+  const accEl = document.getElementById('quizAccStat');
+  if (accEl) accEl.textContent = acc + '%';
+}
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const nav = document.getElementById('nav-' + page);
+  if (nav) nav.classList.add('active');
+  closeDropdown();
+  if (page === 'kuis')    renderQuiz();
+  if (page === 'progres') renderProgressPage();
+}
+
+function toggleDropdown() { document.getElementById('profileDropdown').classList.toggle('open'); }
+function closeDropdown()  { document.getElementById('profileDropdown').classList.remove('open'); }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.user-avatar') && !e.target.closest('.profile-dropdown')) closeDropdown();
+});
+
+/* ════════════════════════════════════════
+   BERANDA
+════════════════════════════════════════ */
+function renderPopularVocab() {
+  document.getElementById('popularVocab').innerHTML = VOCAB_DATA.slice(0, 8).map((v, i) => `
+    <div class="vocab-mini-card" onclick="openVocabDetail(${i})">
+      <span class="vocab-hanzi">${v.hanzi}</span>
+      <div class="vocab-pinyin">${v.pinyin}</div>
+      <div class="vocab-meaning">${v.meaning}</div>
+    </div>
+  `).join('');
+}
+
+/* ════════════════════════════════════════
+   KOSAKATA - FILTER TABS & LIST
+════════════════════════════════════════ */
+let activeFilter  = 'Semua';
+let searchQuery   = '';
+
+function renderFilterTabs() {
+  const cats = ['Semua', ...new Set(VOCAB_DATA.map(v => v.category))];
+  document.getElementById('filterTabs').innerHTML = cats.map(c => `
+    <button class="filter-tab ${c === activeFilter ? 'active' : ''}" onclick="selectFilter('${c}')">${c}</button>
+  `).join('');
+}
+
+function selectFilter(cat) {
+  activeFilter = cat;
+  renderFilterTabs();
+  renderTasksList();
+}
+
+function filterVocab() {
+  searchQuery = document.getElementById('vocabSearch').value.toLowerCase();
+  renderTasksList();
+}
+
+function renderTasksList() {
+  let list = VOCAB_DATA;
+  if (activeFilter !== 'Semua') list = list.filter(v => v.category === activeFilter);
+  if (searchQuery) {
+    list = list.filter(v =>
+      v.hanzi.includes(searchQuery) ||
+      v.pinyin.toLowerCase().includes(searchQuery) ||
+      v.meaning.toLowerCase().includes(searchQuery)
+    );
+  }
+
+  if (!list.length) {
+    document.getElementById('tasksList').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>Tidak ada kosakata</h3>
+        <p>Coba ubah kata kunci pencarian kamu.</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('tasksList').innerHTML = list.map(v => {
+    const idx = VOCAB_DATA.indexOf(v);
+    return `
+    <div class="task-item ${v.category}" onclick="openVocabDetail(${idx})">
+      <div class="task-hanzi">${v.hanzi}</div>
+      <div class="task-content">
+        <div class="task-text">${v.meaning}</div>
+        <div class="task-meta">
+          <span class="task-pinyin">🔤 ${v.pinyin}</span>
+          <span>📌 ${v.pos}</span>
+          <span>🏷️ ${v.category}</span>
+        </div>
+      </div>
+      <button class="btn-icon btn-audio" id="audio-btn-${idx}"
+        onclick="event.stopPropagation(); playAudio(${idx})" title="Dengarkan">
+        <i class="bi bi-volume-up-fill"></i>
+      </button>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════
+   VOCAB DETAIL MODAL
+════════════════════════════════════════ */
+let currentModalVocab = null;
+
+function openVocabDetail(idx) {
+  const v = VOCAB_DATA[idx];
+  currentModalVocab = v;
+
+  // Tandai sebagai dipelajari
+  const p = getProgress();
+  if (!p.learnedWords.includes(v.hanzi)) {
+    p.learnedWords.push(v.hanzi);
+    p.totalWords  = p.learnedWords.length;
+    p.todayWords  = Math.min((p.todayWords || 0) + 1, 10);
+    saveProgress(p);
+    updateStats(p);
+  }
+
+  document.getElementById('vocabModalBody').innerHTML = `
+    <div class="modal-hanzi">${v.hanzi}</div>
+    <div class="modal-pinyin">${v.pinyin}</div>
+    <div class="modal-meaning">${v.meaning}</div>
+    <div style="text-align:center;margin-bottom:4px">
+      <span style="font-size:12px;color:var(--text-light);background:var(--sage);padding:3px 10px;border-radius:10px">${v.pos} · ${v.category}</span>
+    </div>
+    <div class="modal-example">
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:6px;font-weight:600">CONTOH KALIMAT</div>
+      <div class="modal-example-hanzi">${v.example}</div>
+      <div class="modal-example-pinyin">${v.exPinyin}</div>
+      <div class="modal-example-meaning">${v.exMeaning}</div>
+    </div>`;
+
+  new bootstrap.Modal(document.getElementById('vocabModal')).show();
+}
+
+/* ════════════════════════════════════════
+   AUDIO (Web Speech API)
+════════════════════════════════════════ */
+function speak(text) {
+  if (!('speechSynthesis' in window)) { showToast('⚠️ Browser tidak mendukung audio.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-CN'; u.rate = 0.85; u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function playAudio(idx) {
+  const v   = VOCAB_DATA[idx];
+  const btn = document.getElementById('audio-btn-' + idx);
+  if (btn) { btn.classList.add('playing'); setTimeout(() => btn.classList.remove('playing'), 1500); }
+  speak(v.hanzi);
+  showToast('🔊 ' + v.hanzi + ' · ' + v.pinyin);
+}
+
+function playModalAudio() { if (currentModalVocab) speak(currentModalVocab.hanzi); }
+
+/* ════════════════════════════════════════
+   KUIS
+════════════════════════════════════════ */
+let quizState = { questions: [], current: 0, score: 0, answered: false, finished: false };
+
+function generateQuestions() {
+  const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 10).map(v => {
+    const type  = Math.random() > 0.5 ? 'meaning' : 'pinyin';
+    const wrong = VOCAB_DATA.filter(w => w.hanzi !== v.hanzi).sort(() => Math.random() - 0.5).slice(0, 3);
+    const opts  = [v, ...wrong].sort(() => Math.random() - 0.5);
+    return {
+      vocab:    v,
+      type,
+      question: type === 'meaning' ? `Apa arti dari "${v.hanzi}"?` : `Apa pinyin dari "${v.hanzi}"?`,
+      answer:   type === 'meaning' ? v.meaning : v.pinyin,
+      options:  opts.map(o => type === 'meaning' ? o.meaning : o.pinyin)
+    };
+  });
+}
+
+function renderQuiz() {
+  if (quizState.finished) { renderQuizResult(); return; }
+  if (!quizState.questions.length) {
+    quizState = { questions: generateQuestions(), current: 0, score: 0, answered: false, finished: false };
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q        = quizState.questions[quizState.current];
+  const total    = quizState.questions.length;
+  const progress = (quizState.current / total) * 100;
+
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="quiz-header">
+      <h5>测验 · Kuis Mandarin</h5>
+      <div class="quiz-score">${quizState.score} <span>/ ${total} poin</span></div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" style="width:${progress}%"></div>
+      </div>
+      <div style="font-size:12px;opacity:0.8;margin-top:8px">Soal ${quizState.current + 1} dari ${total}</div>
+    </div>
+    <div class="question-card">
+      <div class="question-type-badge">${q.type === 'meaning' ? '📖 Arti' : '🔤 Pinyin'}</div>
+      <span class="question-hanzi">${q.vocab.hanzi}</span>
+      <div class="question-text">${q.question}</div>
+    </div>
+    <div class="options-grid" id="optionsGrid">
+      ${q.options.map((opt, i) => `
+        <button class="option-btn" id="opt-${i}"
+          onclick="selectAnswer('${opt.replace(/'/g,"\\'")}','${q.answer.replace(/'/g,"\\'")}',${i})">
+          ${opt}
+        </button>`).join('')}
+    </div>
+    <div class="feedback-msg" id="feedbackMsg"></div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">
+      ${quizState.current + 1 < total ? 'Soal Berikutnya →' : 'Lihat Hasil 🏆'}
+    </button>`;
+}
+
+function selectAnswer(selected, correct, idx) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  const isCorrect  = selected === correct;
+  const allBtns    = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.disabled = true);
+  document.getElementById('opt-' + idx).classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) allBtns.forEach(b => { if (b.textContent.trim() === correct) b.classList.add('correct'); });
+  const fb = document.getElementById('feedbackMsg');
+  fb.style.display = 'block';
+  fb.className = 'feedback-msg ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = isCorrect ? '✅ Benar! Bagus sekali! 🎉' : `❌ Salah. Jawaban benar: <strong>${correct}</strong>`;
+  if (isCorrect) quizState.score++;
+  document.getElementById('btnNext').style.display = 'block';
+
+  const p = getProgress();
+  p.quizTotal   = (p.quizTotal || 0) + 1;
+  if (isCorrect) p.quizCorrect = (p.quizCorrect || 0) + 1;
+  saveProgress(p);
+  updateStats(p);
+}
+
+function nextQuestion() {
+  quizState.answered = false;
+  quizState.current++;
+  if (quizState.current >= quizState.questions.length) { quizState.finished = true; renderQuizResult(); }
+  else renderQuestion();
+}
+
+function renderQuizResult() {
+  const pct   = Math.round((quizState.score / quizState.questions.length) * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '🌟' : '📚';
+  const msg   = pct >= 80 ? 'Luar Biasa!' : pct >= 60 ? 'Bagus!' : 'Terus Berlatih!';
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-title">${msg}</div>
+      <div class="result-sub">Kamu menyelesaikan kuis hari ini</div>
+      <div class="result-stat">
+        <div class="result-stat-item"><div class="result-stat-val">${quizState.score}</div><div class="result-stat-lbl">Benar</div></div>
+        <div class="result-stat-item"><div class="result-stat-val">${quizState.questions.length - quizState.score}</div><div class="result-stat-lbl">Salah</div></div>
+        <div class="result-stat-item"><div class="result-stat-val">${pct}%</div><div class="result-stat-lbl">Skor</div></div>
+      </div>
+      <button class="btn-primary" onclick="restartQuiz()">🔄 Main Lagi</button>
+    </div>`;
+}
+
+function restartQuiz() {
+  quizState = { questions: [], current: 0, score: 0, answered: false, finished: false };
+  renderQuiz();
+}
+
+/* ════════════════════════════════════════
+   DAILY LESSON
+════════════════════════════════════════ */
+function renderLesson() {
+  const p       = getProgress();
+  const dayIdx  = Math.min((p.currentDay || 1) - 1, DAILY_LESSONS.length - 1);
+  const lesson  = DAILY_LESSONS[dayIdx];
+  const dayVocab= VOCAB_DATA.filter(v => lesson.vocab.includes(v.hanzi));
+  const dateStr = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+
+  document.getElementById('lessonContainer').innerHTML = `
+    <div class="lesson-header">
+      <div class="lesson-day">📅 ${dateStr}</div>
+      <div class="lesson-title">Hari ${lesson.day}: ${lesson.title}</div>
+      <div class="lesson-subtitle">${lesson.subtitle}</div>
+    </div>
+
+    <div class="input-section">
+      <div class="step-number">1</div>
+      <div class="step-title">📖 Pendahuluan</div>
+      <div class="step-desc" style="margin-top:6px">${lesson.intro}</div>
+    </div>
+
+    <div class="input-section">
+      <div class="step-number">2</div>
+      <div class="step-title">📚 Kosakata Hari Ini (${dayVocab.length} kata)</div>
+      <div style="margin-top:12px">
+        ${dayVocab.map(v => {
+          const idx = VOCAB_DATA.indexOf(v);
+          return `
+          <div class="lesson-vocab-item">
+            <div class="lesson-hanzi">${v.hanzi}</div>
+            <div style="flex:1">
+              <div style="font-size:13px;color:var(--mint-dark);font-weight:600">${v.pinyin}</div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-dark)">${v.meaning}</div>
+            </div>
+            <button class="btn-icon btn-audio" onclick="playAudio(${idx})">
+              <i class="bi bi-volume-up-fill"></i>
+            </button>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="input-section">
+      <div class="step-number">3</div>
+      <div class="step-title">💡 Tips Budaya</div>
+      <div style="margin-top:8px;background:var(--peach);border-radius:12px;padding:14px;font-size:13px;color:var(--text-dark);line-height:1.6">
+        ${lesson.tips}
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="completeLesson(${dayIdx})">
+      <span>✅</span> Selesaikan Pelajaran Hari Ini
+    </button>
+
+    ${p.currentDay > 1 ? `<div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-light)">
+      Sudah selesai: Hari 1 – ${Math.min(p.currentDay - 1, DAILY_LESSONS.length)}
+    </div>` : ''}
+  `;
+}
+
+function completeLesson(dayIdx) {
+  const p       = getProgress();
+  const lesson  = DAILY_LESSONS[dayIdx];
+  const dayVocab= VOCAB_DATA.filter(v => lesson.vocab.includes(v.hanzi));
+
+  dayVocab.forEach(v => { if (!p.learnedWords.includes(v.hanzi)) p.learnedWords.push(v.hanzi); });
+  p.totalWords  = p.learnedWords.length;
+  p.todayWords  = Math.min((p.todayWords || 0) + dayVocab.length, 10);
+  if (p.currentDay <= DAILY_LESSONS.length) p.currentDay = Math.min((p.currentDay || 1) + 1, DAILY_LESSONS.length + 1);
+  if (p.streak === 0) p.streak = 1;
+
+  saveProgress(p);
+  updateStats(p);
+  showToast('🎉 Pelajaran selesai! Hebat!');
+  renderLesson();
+  renderProgressPage();
+}
+
+/* ════════════════════════════════════════
+   PROGRESS PAGE
+════════════════════════════════════════ */
+function renderProgressPage() {
+  const p   = getProgress();
+  const acc = p.quizTotal > 0 ? Math.round((p.quizCorrect / p.quizTotal) * 100) : 0;
+
+  const achievements = [
+    { icon:'🌱', title:'Pemula',        desc:'Daftar dan mulai belajar',            earned: true },
+    { icon:'📚', title:'Rajin Belajar', desc:'Pelajari 10 kata pertama',            earned: (p.totalWords || 0) >= 10 },
+    { icon:'🔥', title:'On Fire!',      desc:'Streak 3 hari berturut-turut',        earned: (p.streak || 0) >= 3 },
+    { icon:'🏆', title:'Kuis Master',   desc:'Selesaikan 5 kuis',                   earned: (p.quizTotal || 0) >= 5 },
+    { icon:'⭐', title:'Bintang',       desc:'Pelajari 25 kata',                    earned: (p.totalWords || 0) >= 25 },
+    { icon:'🎓', title:'Lulus Dasar',   desc:'Selesaikan semua pelajaran harian',   earned: (p.currentDay || 1) > DAILY_LESSONS.length },
+  ];
+
+  const calDays = [];
+  for (let i = 27; i >= 0; i--) {
+    const d  = new Date(Date.now() - i * 86400000);
+    const ds = d.toDateString();
+    calDays.push({ label: d.getDate(), active: (p.studyDates || []).includes(ds), today: ds === new Date().toDateString() });
+  }
+
+  document.getElementById('progressContainer').innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-value">${p.totalWords || 0}</div><div class="stat-label">Kata Dipelajari</div></div>
+      <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value">${p.streak || 0}</div><div class="stat-label">Hari Streak</div></div>
+      <div class="stat-card"><div class="stat-icon">🧩</div><div class="stat-value">${p.quizTotal || 0}</div><div class="stat-label">Kuis Selesai</div></div>
+      <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value">${acc}%</div><div class="stat-label">Akurasi Kuis</div></div>
+    </div>
+
+    <div class="streak-calendar">
+      <div style="font-size:15px;font-weight:700;color:var(--text-dark)">📅 Kalender Belajar</div>
+      <div style="font-size:12px;color:var(--text-light);margin-top:2px">28 hari terakhir</div>
+      <div class="calendar-grid">
+        ${calDays.map(d => `<div class="cal-day ${d.today ? 'today' : d.active ? 'active' : ''}">${d.label}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="section-title" style="margin:0 0 14px">🏅 <span>Pencapaian</span></div>
+    <div class="achievement-list">
+      ${achievements.map(a => `
+        <div class="achievement-item">
+          <div class="achievement-icon ${a.earned ? 'earned' : 'locked'}">${a.icon}</div>
+          <div>
+            <div class="achievement-title">${a.title} ${a.earned ? '✅' : '🔒'}</div>
+            <div class="achievement-desc">${a.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="height:20px"></div>`;
+}
+
+/* ════════════════════════════════════════
+   SERVICE WORKER REGISTRATION
+   (mengikuti pola template dosen)
+════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+      .catch(err => console.error('❌ Service Worker error:', err));
+  });
+}
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', checkSession);
+</script>
 
 </body>
-
 </html>
