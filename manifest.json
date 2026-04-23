@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "PWA Template Responsif",
-  "short_name": "PWA Demo",
-  "description": "Aplikasi PWA responsif untuk demonstrasi template dasar Progressive Web App dengan dukungan offline dan installable.",
+  "name": "xinyahanzi",
+  "short_name": "xinyahanzi",
+  "description": "xinyahanzibelajarbahasamandarin",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -12,25 +12,25 @@
   "lang": "id",
   "icons": [
     {
-      "src": "icons/icon-192x192-A.png",
-      "sizes": "192x192",
+      "src": "icons/logo-xinya.png",
+      "sizes": "1254x1254",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512x512-B.png",
-      "sizes": "512x512",
+      "src": "icons/logo-xinya.png",
+      "sizes": "1254x1254",
       "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "icons/screenshot1.png",
-      "sizes": "1080x1920",
+      "src": "xinyaaplikasi",
+      "sizes": "1024x1536",
       "type": "image/png"
     },
     {
-      "src": "icons/screenshot2.png",
-      "sizes": "1080x1920",
+      "src": "xinyavocabulary",
+      "sizes": "1024x1536",
       "type": "image/png"
     }
   ],
@@ -42,7 +42,7 @@
       "icons": [
         {
           "src": "icons/icon-192x192-A.png",
-          "sizes": "192x192"
+          "sizes": "64x64"
         }
       ]
     }
